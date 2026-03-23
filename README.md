@@ -48,4 +48,4 @@ Then open http://localhost:5173
 
 ## Screenshot
 
-![Ollama Multi-Chat](src/assets/hero.png)
+![Ollama Multi-Chat](screenshot.jpg)
