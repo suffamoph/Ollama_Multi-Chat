@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# Ollama Multi-Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A local multi-model chat interface for [Ollama](https://ollama.com), allowing you to compare multiple LLM responses side by side in real time.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Multi-model columns** — Run multiple models simultaneously, each in its own column. Send one message, get parallel responses.
+- **Streaming output** — Token-by-token streaming display for all models at once.
+- **Thinking mode** — Toggle thinking (chain-of-thought) per model with an independent switch. Collapsible thinking blocks in responses.
+- **VRAM monitoring** — Real-time GPU VRAM usage via `nvidia-smi`, with a segmented progress bar showing per-model breakdown.
+- **Multimodal support** — Upload images via button, clipboard paste, or drag-and-drop. Works with vision-capable models.
+- **Model capabilities** — Auto-detects vision, thinking, and tools support from Ollama, displayed as emoji badges.
+- **Response stats** — Duration, tokens/sec, thinking status, and prompt/completion token counts per response.
 
-## React Compiler
+## Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- [Node.js](https://nodejs.org/) (v18+)
+- [Ollama](https://ollama.com) installed with at least one model pulled
+- NVIDIA GPU (for VRAM monitoring)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Run
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Double-click **`启动.bat`** or run manually:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Install dependencies (first time only)
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start Ollama (if not already running)
+ollama serve
+
+# Start GPU monitor backend
+node server.cjs
+
+# Start frontend
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open http://localhost:5173
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Architecture
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **Frontend** — React 18 + TypeScript + Vite + Tailwind CSS
+- **GPU Monitor** — Lightweight Express server (port 3456) calling `nvidia-smi`
+- **Backend** — Ollama REST API (default port 11434), no custom backend needed
+
+## Screenshot
+
+![Ollama Multi-Chat](src/assets/hero.png)
